@@ -48,7 +48,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/microsoft-speech-browser-sdk/distrib/speech.sdk.bundle.js"
+            ]
           },
           "configurations": {
             "production": {

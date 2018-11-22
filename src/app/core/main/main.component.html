@@ -14,6 +14,7 @@
       <form #commandForm="ngForm" (ngSubmit)="sendCommand()">
         <mat-form-field color="primary">
           <input matInput placeholder="Enter command" [(ngModel)]="command" name="command">
+          <mat-icon matSuffix (click)="record()">mic</mat-icon>
         </mat-form-field>
       </form>
     </div>

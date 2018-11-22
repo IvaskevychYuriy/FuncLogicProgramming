@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrelloService } from '../services/trello.service';
 import { LuisService } from '../services/luis.service';
+import { LuisSpeechService } from '../services/luis-speech.service';
 
 @Component({
   selector: 'app-main',
@@ -12,7 +13,7 @@ export class MainComponent implements OnInit {
   public loggedIn = false;
   command = '';
 
-  constructor(public trelloService: TrelloService, public luisService: LuisService) { }
+  constructor(public trelloService: TrelloService, public luisService: LuisService, public luisSpeechService: LuisSpeechService) { }
 
   ngOnInit() {
   }
@@ -42,6 +43,10 @@ export class MainComponent implements OnInit {
 
       this.command = '';
     })
+  }
+
+  record() {
+    this.luisSpeechService.record().subscribe(res => console.log(res));
   }
 
 }

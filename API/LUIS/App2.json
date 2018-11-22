@@ -1,0 +1,304 @@
+{
+  "luis_schema_version": "3.1.0",
+  "versionId": "0.1",
+  "name": "App2",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "CreateBoard"
+    },
+    {
+      "name": "CreateList"
+    },
+    {
+      "name": "CreateTask"
+    },
+    {
+      "name": "DeleteList"
+    },
+    {
+      "name": "DeleteTask"
+    },
+    {
+      "name": "MoveTask"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "OpenBoard"
+    }
+  ],
+  "entities": [
+    {
+      "name": "EntityName",
+      "roles": [
+        "ListName",
+        "TaskName"
+      ]
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [],
+  "model_features": [
+    {
+      "name": "create",
+      "mode": true,
+      "words": "add,start,begin,make",
+      "activated": true
+    },
+    {
+      "name": "board",
+      "mode": true,
+      "words": "project",
+      "activated": true
+    },
+    {
+      "name": "list",
+      "mode": true,
+      "words": "tasklist,column",
+      "activated": true
+    },
+    {
+      "name": "delete",
+      "mode": true,
+      "words": "remove,drop,erase,eliminate",
+      "activated": true
+    },
+    {
+      "name": "task",
+      "mode": true,
+      "words": "work item",
+      "activated": true
+    },
+    {
+      "name": "move",
+      "mode": true,
+      "words": "carry,relocate,transfer,pull",
+      "activated": true
+    },
+    {
+      "name": "open",
+      "mode": true,
+      "words": "launch",
+      "activated": true
+    }
+  ],
+  "regex_features": [],
+  "patterns": [
+    {
+      "pattern": "open board {EntityName}",
+      "intent": "OpenBoard"
+    },
+    {
+      "pattern": "create [new] board {EntityName}",
+      "intent": "CreateBoard"
+    },
+    {
+      "pattern": "create [new] task {EntityName:TaskName} in [list] {EntityName:ListName}",
+      "intent": "CreateTask"
+    },
+    {
+      "pattern": "delete list {EntityName}",
+      "intent": "DeleteList"
+    },
+    {
+      "pattern": "create [new] list {EntityName}",
+      "intent": "CreateList"
+    },
+    {
+      "pattern": "move [task] {EntityName:TaskName} to [list] {EntityName:ListName}",
+      "intent": "MoveTask"
+    },
+    {
+      "pattern": "delete [task] {EntityName:TaskName} [from list {EntityName:ListName}]",
+      "intent": "DeleteTask"
+    }
+  ],
+  "utterances": [
+    {
+      "text": "add list proj2_list1",
+      "intent": "CreateList",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 9,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "add new project proj2",
+      "intent": "CreateBoard",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 16,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "add task migrate database in todo",
+      "intent": "CreateTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 9,
+          "endPos": 24
+        },
+        {
+          "entity": "EntityName",
+          "startPos": 29,
+          "endPos": 32
+        }
+      ]
+    },
+    {
+      "text": "create board testproj",
+      "intent": "CreateBoard",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 13,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "create new tasklist lst2",
+      "intent": "CreateList",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 20,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "create new work item do refactoring in list new",
+      "intent": "CreateTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 21,
+          "endPos": 34
+        },
+        {
+          "entity": "EntityName",
+          "startPos": 44,
+          "endPos": 46
+        }
+      ]
+    },
+    {
+      "text": "delete list done",
+      "intent": "DeleteList",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 12,
+          "endPos": 15
+        }
+      ]
+    },
+    {
+      "text": "delete task some task",
+      "intent": "DeleteTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 12,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "drop tasklist code review",
+      "intent": "DeleteList",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 14,
+          "endPos": 24
+        }
+      ]
+    },
+    {
+      "text": "launch project samples",
+      "intent": "OpenBoard",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 15,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "move task redeploy prod to list done",
+      "intent": "MoveTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 10,
+          "endPos": 22
+        },
+        {
+          "entity": "EntityName",
+          "startPos": 32,
+          "endPos": 35
+        }
+      ]
+    },
+    {
+      "text": "move task3 to in progress",
+      "intent": "MoveTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 5,
+          "endPos": 9
+        },
+        {
+          "entity": "EntityName",
+          "startPos": 14,
+          "endPos": 24
+        }
+      ]
+    },
+    {
+      "text": "open board new board",
+      "intent": "OpenBoard",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 11,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "remove investigate from list investigation",
+      "intent": "DeleteTask",
+      "entities": [
+        {
+          "entity": "EntityName",
+          "startPos": 7,
+          "endPos": 17
+        },
+        {
+          "entity": "EntityName",
+          "startPos": 29,
+          "endPos": 41
+        }
+      ]
+    }
+  ],
+  "settings": []
+}

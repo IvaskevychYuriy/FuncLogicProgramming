@@ -24,6 +24,22 @@ export class MainComponent implements OnInit {
   sendCommand() {
     this.luisService.sendCommand(this.command).subscribe(res => {
       console.log(res);
+
+      switch (res.topScoringIntent.intent) {
+        case 'CreateBoard':
+          const maximum = Math.max(...res.entities.map(e => e.score));
+
+          const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
+
+          this.trelloService.addBoard(lookup.entity).subscribe(res => {
+            console.log(res);
+          })
+          break;
+      
+        default:
+          break;
+      }
+
       this.command = '';
     })
   }

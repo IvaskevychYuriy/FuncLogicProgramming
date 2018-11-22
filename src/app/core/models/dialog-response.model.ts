@@ -19,7 +19,7 @@ export interface Metadata {
 }
 
 export interface Parameters {
-    fruit: string[];
+    [key: string]: string | string[];
 }
 
 export interface Result {

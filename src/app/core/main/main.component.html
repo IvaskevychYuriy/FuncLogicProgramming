@@ -1,0 +1,22 @@
+<ng-container *ngIf="!loggedIn">
+  <button mat-raised-button (click)="login()" color="primary">
+    Login to Trello
+  </button>
+</ng-container>
+
+<ng-container *ngIf="loggedIn">
+  <div class="trello-container">
+    <iframe src="https://trello.com/user39986765/boards">
+
+    </iframe>
+
+    <div class="command-field mat-elevation-z2">
+      <form #commandForm="ngForm" (ngSubmit)="sendCommand()">
+        <mat-form-field color="primary">
+          <input matInput placeholder="Enter command" [(ngModel)]="command" name="command">
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+
+</ng-container>

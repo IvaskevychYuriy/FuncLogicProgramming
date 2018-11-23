@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatInputModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatIconModule, MatCardModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './core/main/main.component';
@@ -21,7 +21,8 @@ import { MainComponent } from './core/main/main.component';
     FormsModule,
     MatButtonModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

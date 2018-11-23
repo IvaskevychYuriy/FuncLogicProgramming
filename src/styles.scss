@@ -16,4 +16,16 @@ body {
 
 @import "~@angular/material/prebuilt-themes/purple-green";
 
-
+app-main {
+  .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: white !important;
+  }
+  
+  .mat-input-element {
+    caret-color: white !important;
+  }
+  
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: white !important;
+  }
+}

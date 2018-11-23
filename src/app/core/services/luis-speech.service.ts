@@ -60,7 +60,7 @@ export class LuisSpeechService {
     });
   }
 
-  DestroySpeechObject() {
+  destroySpeechObject() {
     if (this.speechRecognition)
       this.speechRecognition.stop();
   }

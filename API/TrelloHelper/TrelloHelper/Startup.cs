@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using TrelloHelper.Common;
+using TrelloHelper.Infrastructure.Trello;
 
 namespace TrelloHelper
 {
@@ -20,6 +23,13 @@ namespace TrelloHelper
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.Configure<TrelloHelperConfiguration>(Configuration.GetSection("Configuration"));
+
+            services.AddHttpClient<TrelloHttpClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.github.com/");
+            });
+
             services.AddMemoryCache();
         }
 
@@ -30,12 +40,8 @@ namespace TrelloHelper
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
-            app.UseHttpsRedirection();
+
             app.UseMvc();
         }
     }

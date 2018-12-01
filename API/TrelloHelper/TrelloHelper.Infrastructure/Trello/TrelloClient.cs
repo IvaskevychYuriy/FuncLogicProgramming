@@ -1,6 +1,5 @@
 using Infrastructure.Trello;
-using System.Net.Http;
-s
+
 
 namespace TrelloHelper.Infrastructure.Trello
 {

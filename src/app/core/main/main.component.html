@@ -1,12 +1,24 @@
 <ng-container *ngIf="!loggedIn">
-  <button mat-raised-button (click)="login()" color="primary">
-    Login to Trello
-  </button>
+  <div class="login-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Trello AI Helper</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <button mat-flat-button (click)="login()" color="primary">
+          Login to Trello
+        </button>
+      </mat-card-content>
+
+
+    </mat-card>
+
+  </div>
 </ng-container>
 
 <ng-container *ngIf="loggedIn">
   <div class="trello-container">
-    <iframe src="https://trello.com/user39986765/boards">
+    <iframe [src]="url">
 
     </iframe>
 
@@ -14,6 +26,7 @@
       <form #commandForm="ngForm" (ngSubmit)="sendCommand()">
         <mat-form-field color="primary">
           <input matInput placeholder="Enter command" [(ngModel)]="command" name="command">
+          <mat-icon matSuffix (click)="record()">mic</mat-icon>
         </mat-form-field>
       </form>
     </div>

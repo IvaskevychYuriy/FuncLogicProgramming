@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrelloHelper.BusinessLogic", "TrelloHelper.BusinessLogic\TrelloHelper.BusinessLogic.csproj", "{99F79573-8738-428B-AAE1-E2B8A64BD6D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrelloHelper.Common", "TrelloHelper.Common\TrelloHelper.Common.csproj", "{0EFD4A2E-8E7D-4938-9F57-6E6F4842771C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{4812FBF0-CF8A-4579-BAC1-BD3DF35748CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{99F79573-8738-428B-AAE1-E2B8A64BD6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99F79573-8738-428B-AAE1-E2B8A64BD6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99F79573-8738-428B-AAE1-E2B8A64BD6D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0EFD4A2E-8E7D-4938-9F57-6E6F4842771C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0EFD4A2E-8E7D-4938-9F57-6E6F4842771C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0EFD4A2E-8E7D-4938-9F57-6E6F4842771C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0EFD4A2E-8E7D-4938-9F57-6E6F4842771C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4812FBF0-CF8A-4579-BAC1-BD3DF35748CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4812FBF0-CF8A-4579-BAC1-BD3DF35748CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4812FBF0-CF8A-4579-BAC1-BD3DF35748CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4812FBF0-CF8A-4579-BAC1-BD3DF35748CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

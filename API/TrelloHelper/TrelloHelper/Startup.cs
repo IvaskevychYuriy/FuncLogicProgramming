@@ -1,5 +1,6 @@
 using Common;
 using Common.Configurations;
+using Common.Configurations.Options;
 using Infrastructure.LUIS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,8 +41,15 @@ namespace TrelloHelper
 				client.BaseAddress = new Uri(luisConfig.APIUrl);
 			});
 
-			services.AddMemoryCache();
-        }
+			var memoryCacheConfig = Configuration.GetSection(ConfigurationNames.MemoryCacheConfig).Get<MemoryCacheConfig>();
+			services.AddMemoryCache(config =>
+			{
+				config.ExpirationScanFrequency = TimeSpan.FromMinutes(memoryCacheConfig.ExpirationScanMinutes);
+				config.SizeLimit = memoryCacheConfig.SizeLimit;
+			});
+
+			services.Configure<ContextEntryOptions>(Configuration.GetSection(ConfigurationNames.ContextEntryOptions));
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

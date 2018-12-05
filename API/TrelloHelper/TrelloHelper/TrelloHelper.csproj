@@ -21,7 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\TrelloHelper.BusinessLogic\TrelloHelper.BusinessLogic.csproj" />
     <ProjectReference Include="..\TrelloHelper.Infrastructure\TrelloHelper.Infrastructure.csproj" />
   </ItemGroup>
 

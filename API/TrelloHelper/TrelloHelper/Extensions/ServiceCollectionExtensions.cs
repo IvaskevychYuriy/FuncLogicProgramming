@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using TrelloHelper.BusinessLogic.Intent;
+using TrelloHelper.BusinessLogic.Intent.Handlers;
 using TrelloHelper.Infrastructure.LUIS;
 using TrelloHelper.Infrastructure.Trello;
 
@@ -78,7 +79,7 @@ namespace TrelloHelper.Extensions
 		{
 			services.AddScoped<IIntentHandlersContext, IntentHandlersContext>();
 			services.Scan(scan => scan
-				.FromCallingAssembly()
+				.FromAssemblyOf<TrelloIntentHandlerBase>()
 				.AddClasses(cfg => cfg.AssignableTo<IIntentHandler>())
 				.AsImplementedInterfaces()
 				.WithScopedLifetime());

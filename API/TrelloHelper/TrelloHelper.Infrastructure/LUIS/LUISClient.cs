@@ -21,7 +21,7 @@ namespace TrelloHelper.Infrastructure.LUIS
             request = request ?? throw new ArgumentNullException(nameof(request));
 
             var result = await _client.GetAsync($"&q={request.Query}").ConfigureAwait(false);
-			return await result.Content.ReadAsJsonAsync<LUISResponse>();
+			return await result.Content.ReadAsJsonAsync<LUISResponse>().ConfigureAwait(false);
         }
     }
 }

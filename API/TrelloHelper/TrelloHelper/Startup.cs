@@ -1,9 +1,15 @@
+using Common;
+using Common.Configurations;
+using Infrastructure.LUIS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using TrelloHelper.Extensions;
+using TrelloHelper.Infrastructure.LUIS;
+using TrelloHelper.Infrastructure.Trello;
 
 namespace TrelloHelper
 {
@@ -21,6 +27,21 @@ namespace TrelloHelper
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.Configure<TrelloHelperConfiguration>(Configuration.GetSection("Configuration"));
+
+			// TODO: move this somewhere
+            services.AddHttpClient<TrelloHttpClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.trello.com/1/");
+            });
+
+			var luisConfig = Configuration.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();
+			services.AddHttpClient<ILUISClient, LUISClient>(client =>
+			{
+				client.BaseAddress = new Uri(luisConfig.APIUrl);
+			});
+
+			services.AddMemoryCache();
 			services.RegisterServices(Configuration);
 		}
 

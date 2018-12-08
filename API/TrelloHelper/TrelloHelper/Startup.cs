@@ -31,7 +31,7 @@ namespace TrelloHelper
 			// TODO: move this somewhere
             services.AddHttpClient<TrelloHttpClient>(client =>
             {
-                client.BaseAddress = new Uri("https://api.github.com/");
+                client.BaseAddress = new Uri("https://api.trello.com/1/");
             });
 
 			var luisConfig = Configuration.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();

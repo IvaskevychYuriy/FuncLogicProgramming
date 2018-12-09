@@ -3,12 +3,13 @@ using Common;
 using Common.Configurations;
 using Common.Configurations.Options;
 using Infrastructure.LUIS;
+using Infrastructure.Trello;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using TrelloHelper.BusinessLogic.Intent;
-using TrelloHelper.BusinessLogic.Intent.Handlers;
+using TrelloHelper.BusinessLogic.Intent.Models;
 using TrelloHelper.Infrastructure.LUIS;
 using TrelloHelper.Infrastructure.Trello;
 
@@ -27,7 +28,7 @@ namespace TrelloHelper.Extensions
 
 		public static IServiceCollection RegisterOptions(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<ContextEntryOptions>(configuration.GetSection(ConfigurationNames.ContextEntryOptions));
+			services.Configure<ContextEntryOptions>(GetConfig(configuration, ConfigurationNames.ContextEntryOptions));
 
 			return services;
 		}
@@ -35,17 +36,14 @@ namespace TrelloHelper.Extensions
 		public static IServiceCollection RegisterHttpClients(this IServiceCollection services, IConfiguration configuration)
 		{
 			// Trello
-			// TODO: rework
-			services.Configure<TrelloHelperConfiguration>(configuration.GetSection("Configuration"));
-
-			// TODO: move this somewhere
-			services.AddHttpClient<TrelloHttpClient>(client =>
+			var trelloConfig = GetConfig(configuration, ConfigurationNames.TrelloConfig).Get<TrelloConfig>();
+			services.AddHttpClient<ITrelloClient, TrelloClient>(client =>
 			{
-				client.BaseAddress = new Uri("https://api.github.com/");
+				client.BaseAddress = new Uri(trelloConfig.APIUrl);
 			});
 
 			// LUIS
-			var luisConfig = configuration.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();
+			var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig).Get<LUISConfig>();
 			services.AddHttpClient<ILUISClient, LUISClient>(client =>
 			{
 				client.BaseAddress = new Uri(luisConfig.APIUrl);
@@ -56,7 +54,7 @@ namespace TrelloHelper.Extensions
 
 		public static IServiceCollection RegisterMemoryCache(this IServiceCollection services, IConfiguration configuration)
 		{
-			var memoryCacheConfig = configuration.GetSection(ConfigurationNames.MemoryCacheConfig).Get<MemoryCacheConfig>();
+			var memoryCacheConfig = GetConfig(configuration, ConfigurationNames.MemoryCacheConfig).Get<MemoryCacheConfig>();
 			services.AddMemoryCache(config =>
 			{
 				config.ExpirationScanFrequency = TimeSpan.FromMinutes(memoryCacheConfig.ExpirationScanMinutes);
@@ -79,12 +77,17 @@ namespace TrelloHelper.Extensions
 		{
 			services.AddScoped<IIntentExecutor, IntentExecutor>();
 			services.Scan(scan => scan
-				.FromAssemblyOf<TrelloIntentHandlerBase>()
+				.FromAssemblyOf<IntentBase>()
 				.AddClasses(cfg => cfg.AssignableTo<IIntentHandler>())
 				.AsImplementedInterfaces()
 				.WithScopedLifetime());
 
 			return services;
+		}
+
+		private static IConfigurationSection GetConfig(IConfiguration configuration, string subSection)
+		{
+			return configuration.GetSection($"{ConfigurationNames.Root}:{subSection}");
 		}
 	}
 }

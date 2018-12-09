@@ -1,5 +1,6 @@
 using Infrastructure.Trello;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace TrelloHelper.Infrastructure.Trello
 {
@@ -14,12 +15,11 @@ namespace TrelloHelper.Infrastructure.Trello
 
         public HttpClient Client { get; }
 
-        public async void OpenBoard(string id)
+        public async Task OpenBoard(string id)
         {
-            var result = await _httpClient.GetAsync("members/${this.userId}/boards/?key=${TRELLO_KEY}&token=${token}");
+            var result = await _httpClient.GetAsync("members/${this.userId}/boards/?key=${TRELLO_KEY}&token=${token}").ConfigureAwait(false);
 
-            await result.Content.ReadAsStringAsync();
+            await result.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
-
     }
 }

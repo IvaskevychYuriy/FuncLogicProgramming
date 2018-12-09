@@ -3,10 +3,12 @@ using BusinessLogic.Intent.Models;
 using Infrastructure.Trello;
 using System;
 using System.Threading.Tasks;
+using TrelloHelper.BusinessLogic.Intent.Models;
 
 namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
-	public abstract class TrelloIntentHandlerBase : IIntentHandler
+	public abstract class TrelloIntentHandlerBase<TIntent> : IIntentHandler
+		where TIntent : IntentBase, new()
 	{
 		protected readonly ITrelloClient _trelloClient;
 		
@@ -19,19 +21,27 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 
 		public bool CanHandle(IntentData intent)
 		{
-			return !string.IsNullOrEmpty(intent?.Name) && intent.Name == IntentName;
+			return intent?.Name == IntentName;
 		}
 
-		public Task<IntentResult> Handle(IntentData intent)
+		public Task<IntentResult> Handle(IntentData data)
 		{
-			if (!CanHandle(intent))
+			if (!CanHandle(data))
 			{
-				throw new ArgumentException($"Cannot handle requested intent: '{intent?.Name}'");
+				throw new ArgumentException($"Cannot handle requested intent: '{data?.Name}'");
 			}
-
+			
+			var intent = CreateIntentFromData(data);
 			return HandleInternal(intent);
 		}
 
-		protected abstract Task<IntentResult> HandleInternal(IntentData intent);
+		protected abstract Task<IntentResult> HandleInternal(TIntent intent);
+		
+		protected virtual TIntent CreateIntentFromData(IntentData data)
+		{
+			var intent = new TIntent();
+			intent.Data = data;
+			return intent;
+		}
 	}
 }

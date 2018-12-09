@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Intent;
 using BusinessLogic.Intent.Models;
@@ -12,14 +13,14 @@ namespace TrelloHelper.BusinessLogic.Query
 	public class QueryProcessor : IQueryProcessor
 	{
 		private readonly ILUISClient _luisClient;
-		private readonly IIntentHandlersContext _intentsContext;
+		private readonly IIntentExecutor _intentExecutor;
 
 		public QueryProcessor(
 			ILUISClient luisClient,
-			IIntentHandlersContext intentsContext)
+			IIntentExecutor intentExecutor)
 		{
 			_luisClient = luisClient;
-			_intentsContext = intentsContext;
+			_intentExecutor = intentExecutor;
 		}
 
 		public async Task<Response> Process(Request request)
@@ -31,9 +32,13 @@ namespace TrelloHelper.BusinessLogic.Query
 			// TODO: add mapping
 			var intent = new IntentData()
 			{
-				Name = luisResponse?.TopScoringIntent?.Name
+				Name = luisResponse?.TopScoringIntent?.Name,
+				Entities = luisResponse.Entities.Select(e => new IntentEntity()
+				{
+					Name = e.Name
+				}).ToList()
 			};
-			var intentResult = _intentsContext.Execute(intent).ConfigureAwait(false);
+			var intentResult = _intentExecutor.Execute(intent).ConfigureAwait(false);
 			
 			// TODO: add mapping
 			return new Response();

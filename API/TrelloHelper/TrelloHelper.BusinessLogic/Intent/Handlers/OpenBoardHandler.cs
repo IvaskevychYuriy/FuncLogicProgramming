@@ -1,28 +1,59 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BusinessLogic.Context;
+using BusinessLogic.Context.Models;
 using BusinessLogic.Intent.Models;
 using Infrastructure.Trello;
+using TrelloHelper.BusinessLogic.Intent.Constants;
+using TrelloHelper.BusinessLogic.Intent.Models;
 
 namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
-	public class OpenBoardHandler : TrelloIntentHandlerBase
+	public class OpenBoardHandler : TrelloIntentHandlerBase<OpenBoardIntent>
 	{
-		public OpenBoardHandler(ITrelloClient trelloClient) : base(trelloClient)
+		private readonly IContextProvider _contextProvider;
+
+		public OpenBoardHandler(
+			ITrelloClient trelloClient,
+			IContextProvider contextProvider) 
+			: base(trelloClient)
 		{
+			_contextProvider = contextProvider;
 		}
 
-		protected override string IntentName => "OpenBoard";
+		// TODO: move to constants
+		protected override string IntentName => IntentNames.OpenBoard;
 
-		protected override async Task<IntentResult> HandleInternal(IntentData intent)
+		protected override async Task<IntentResult> HandleInternal(OpenBoardIntent intent)
 		{
+			string boardName = intent.BoardName;
+			if (string.IsNullOrEmpty(boardName))
+			{
+				throw new ArgumentException("Board name must be present to open it", nameof(boardName));
+			}
+			
 			// TODO: implement
+			// TODO: add mapping
 			//var model = new OpenBoardModel()
 			//{
-			//	BoardName = intent.Entities["BoardName"].Value;
+			//	BoardName = boardName
 			//}
 
 			//var result = await _trelloClient.OpenBoard(model).ConfigureAwait(false);
 			//// TODO: add mapping
+
+			var entry = new ContextCacheEntry()
+			{
+				BoardName = intent.BoardName
+			};
+
+			var key = new ContextCacheKeyWrapper()
+			{
+				TrelloToken = "" // TODO: get from provider
+			};
+
+			_contextProvider.AddOrUpdate(key, entry);
+
 			//return new IntentResult();
 
 			throw new NotImplementedException();

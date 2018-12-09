@@ -77,7 +77,7 @@ namespace TrelloHelper.Extensions
 		
 		public static IServiceCollection RegisterIntentHandlers(this IServiceCollection services)
 		{
-			services.AddScoped<IIntentHandlersContext, IntentHandlersContext>();
+			services.AddScoped<IIntentExecutor, IntentExecutor>();
 			services.Scan(scan => scan
 				.FromAssemblyOf<TrelloIntentHandlerBase>()
 				.AddClasses(cfg => cfg.AssignableTo<IIntentHandler>())

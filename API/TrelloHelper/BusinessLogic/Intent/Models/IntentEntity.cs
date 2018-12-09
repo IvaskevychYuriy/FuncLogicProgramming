@@ -1,7 +1,7 @@
 ﻿namespace BusinessLogic.Intent.Models
 {
-	public class IntentData
-    {
+	public class IntentEntity
+	{
 		public string Name { get; set; }
 	}
 }

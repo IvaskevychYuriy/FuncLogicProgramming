@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace TrelloHelper.BusinessLogic.Intent
 {
-	public class IntentHandlersContext : IIntentHandlersContext
+	public class IntentExecutor : IIntentExecutor
 	{
 		private readonly IEnumerable<IIntentHandler> _handlers;
 
-		public IntentHandlersContext(IEnumerable<IIntentHandler> handlers)
+		public IntentExecutor(IEnumerable<IIntentHandler> handlers)
 		{
 			_handlers = handlers;
 		}

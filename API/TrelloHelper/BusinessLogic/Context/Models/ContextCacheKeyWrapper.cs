@@ -9,7 +9,7 @@ namespace BusinessLogic.Context.Models
 		public object GetKey()
 		{
 			// add more properties if needed
-			return ValueTuple.Create(TrelloToken);
+			return Tuple.Create(TrelloToken);
 		}
 	}
 }

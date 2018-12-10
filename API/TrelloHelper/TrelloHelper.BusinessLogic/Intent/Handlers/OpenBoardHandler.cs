@@ -27,10 +27,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 		protected override async Task<IntentResult> HandleInternal(OpenBoardIntent intent)
 		{
 			string boardName = intent.BoardName;
-			if (string.IsNullOrEmpty(boardName))
-			{
-				throw new ArgumentException("Board name must be present to open it", nameof(boardName));
-			}
+			ValidateName(boardName, "Board name must be present to open it");
 			
 			// TODO: implement
 			// TODO: add mapping

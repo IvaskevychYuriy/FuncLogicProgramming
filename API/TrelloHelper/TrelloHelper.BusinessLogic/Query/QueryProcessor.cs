@@ -30,7 +30,7 @@ namespace TrelloHelper.BusinessLogic.Query
 			var luisResponse = await GetLUISResponse(request).ConfigureAwait(false);
 
 			// TODO: add mapping
-			var intent = new IntentData()
+			var data = new IntentData()
 			{
 				Name = luisResponse?.TopScoringIntent?.Name,
 				Entities = luisResponse.Entities.Select(e => new IntentEntity()
@@ -38,7 +38,7 @@ namespace TrelloHelper.BusinessLogic.Query
 					Name = e.Name
 				}).ToList()
 			};
-			var intentResult = _intentExecutor.Execute(intent).ConfigureAwait(false);
+			var intentResult = _intentExecutor.Execute(data).ConfigureAwait(false);
 			
 			// TODO: add mapping
 			return new Response();

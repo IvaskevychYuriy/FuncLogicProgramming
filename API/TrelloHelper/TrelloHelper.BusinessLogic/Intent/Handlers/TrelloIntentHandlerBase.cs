@@ -43,5 +43,13 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 			intent.Data = data;
 			return intent;
 		}
+
+		protected virtual void ValidateName(string value, string message)
+		{
+			if (string.IsNullOrEmpty(value))
+			{
+				throw new ArgumentException(message);
+			}
+		}
 	}
 }

@@ -21,7 +21,11 @@ namespace TrelloHelper
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-			services.RegisterServices(Configuration);
+			services.RegisterAutomapper();
+			services.RegisterOptions(Configuration);
+			services.RegisterHttpClients(Configuration);
+			services.RegisterMemoryCache(Configuration);
+			services.RegisterDependencies(Configuration);
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

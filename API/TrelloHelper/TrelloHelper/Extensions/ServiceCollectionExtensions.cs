@@ -1,4 +1,7 @@
-﻿using BusinessLogic.Intent;
+﻿using AutoMapper;
+using BusinessLogic.Context;
+using BusinessLogic.Intent;
+using BusinessLogic.Query;
 using Common;
 using Common.Configurations;
 using Common.Configurations.Options;
@@ -8,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using TrelloHelper.BusinessLogic.Context;
 using TrelloHelper.BusinessLogic.Intent;
 using TrelloHelper.BusinessLogic.Intent.Models;
+using TrelloHelper.BusinessLogic.Query;
 using TrelloHelper.Infrastructure.LUIS;
 using TrelloHelper.Infrastructure.Trello;
 
@@ -17,13 +22,11 @@ namespace TrelloHelper.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection RegisterAutomapper(this IServiceCollection services)
 		{
-			return services
-				.RegisterOptions(configuration)
-				.RegisterHttpClients(configuration)
-				.RegisterMemoryCache(configuration)
-				.RegisterDependencies(configuration);
+			services.AddAutoMapper(typeof(Startup), typeof(QueryProcessor));
+
+			return services;
 		}
 
 		public static IServiceCollection RegisterOptions(this IServiceCollection services, IConfiguration configuration)
@@ -67,15 +70,17 @@ namespace TrelloHelper.Extensions
 		public static IServiceCollection RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.RegisterIntentHandlers();
-
-			// Here simple dependencies are registered, e.g. <IService, ConcreteService>
+			
+			services.AddScoped<IIntentExecutor, IntentExecutor>();
+			services.AddScoped<IContextProvider, ContextProvider>();
+			services.AddScoped<IQueryProcessor, QueryProcessor>();
+			services.AddScoped<IntentHandlerAggregateService>();
 
 			return services;
 		}
 		
 		public static IServiceCollection RegisterIntentHandlers(this IServiceCollection services)
 		{
-			services.AddScoped<IIntentExecutor, IntentExecutor>();
 			services.Scan(scan => scan
 				.FromAssemblyOf<IntentBase>()
 				.AddClasses(cfg => cfg.AssignableTo<IIntentHandler>())

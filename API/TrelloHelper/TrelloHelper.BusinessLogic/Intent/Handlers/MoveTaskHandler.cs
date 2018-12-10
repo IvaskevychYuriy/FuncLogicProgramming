@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BusinessLogic.Intent.Models;
-using Infrastructure.Trello;
 using TrelloHelper.BusinessLogic.Intent.Constants;
 using TrelloHelper.BusinessLogic.Intent.Models;
 
@@ -9,7 +8,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
 	public class MoveTaskHandler : TrelloIntentHandlerBase<MoveTaskIntent>
 	{
-		public MoveTaskHandler(ITrelloClient trelloClient) : base(trelloClient)
+		public MoveTaskHandler(IntentHandlerAggregateService aggregateService) : base(aggregateService)
 		{
 		}
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BusinessLogic.Intent.Models;
-using Infrastructure.Trello;
 using TrelloHelper.BusinessLogic.Intent.Constants;
 using TrelloHelper.BusinessLogic.Intent.Models;
 
@@ -9,7 +8,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
 	public class CreateTaskHandler : TrelloIntentHandlerBase<CreateTaskIntent>
 	{
-		public CreateTaskHandler(ITrelloClient trelloClient) : base(trelloClient)
+		public CreateTaskHandler(IntentHandlerAggregateService aggregateService) : base(aggregateService)
 		{
 		}
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BusinessLogic.Context;
 using BusinessLogic.Context.Models;
 using BusinessLogic.Intent.Models;
-using Infrastructure.Trello;
 using TrelloHelper.BusinessLogic.Intent.Constants;
 using TrelloHelper.BusinessLogic.Intent.Models;
 
@@ -14,24 +13,20 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 		private readonly IContextProvider _contextProvider;
 
 		public OpenBoardHandler(
-			ITrelloClient trelloClient,
+			IntentHandlerAggregateService aggregateService,
 			IContextProvider contextProvider) 
-			: base(trelloClient)
+			: base(aggregateService)
 		{
 			_contextProvider = contextProvider;
 		}
-
-		// TODO: move to constants
+		
 		protected override string IntentName => IntentNames.OpenBoard;
 
 		protected override async Task<IntentResult> HandleInternal(OpenBoardIntent intent)
 		{
 			string boardName = intent.BoardName;
-			if (string.IsNullOrEmpty(boardName))
-			{
-				throw new ArgumentException("Board name must be present to open it", nameof(boardName));
-			}
-			
+			ValidateName(boardName, "Board name must be present to open it");
+
 			// TODO: implement
 			// TODO: add mapping
 			//var model = new OpenBoardModel()
@@ -39,7 +34,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 			//	BoardName = boardName
 			//}
 
-			//var result = await _trelloClient.OpenBoard(model).ConfigureAwait(false);
+			//var result = await _aggregateService.TrelloClient.OpenBoard(model).ConfigureAwait(false);
 			//// TODO: add mapping
 
 			var entry = new ContextCacheEntry()

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BusinessLogic.Intent;
 using BusinessLogic.Intent.Models;
 using BusinessLogic.Query;
@@ -14,45 +14,29 @@ namespace TrelloHelper.BusinessLogic.Query
 	{
 		private readonly ILUISClient _luisClient;
 		private readonly IIntentExecutor _intentExecutor;
+		private readonly IMapper _mapper;
 
 		public QueryProcessor(
 			ILUISClient luisClient,
-			IIntentExecutor intentExecutor)
+			IIntentExecutor intentExecutor,
+			IMapper mapper)
 		{
 			_luisClient = luisClient;
 			_intentExecutor = intentExecutor;
+			_mapper = mapper;
 		}
 
 		public async Task<Response> Process(Request request)
 		{
 			request = request ?? throw new ArgumentNullException(nameof(request));
 
-			var luisResponse = await GetLUISResponse(request).ConfigureAwait(false);
-
-			// TODO: add mapping
-			var intent = new IntentData()
-			{
-				Name = luisResponse?.TopScoringIntent?.Name,
-				Entities = luisResponse.Entities.Select(e => new IntentEntity()
-				{
-					Name = e.Name
-				}).ToList()
-			};
-			var intentResult = _intentExecutor.Execute(intent).ConfigureAwait(false);
+			var luisRequest = _mapper.Map<LUISRequest>(request);
+			var luisResponse = await _luisClient.GetResponse(luisRequest).ConfigureAwait(false);
 			
-			// TODO: add mapping
-			return new Response();
-		}
+			var data = _mapper.Map<IntentData>(luisResponse);
+			var intentResult = await _intentExecutor.Execute(data).ConfigureAwait(false);
 
-		public Task<LUISResponse> GetLUISResponse(Request request)
-		{
-			// TODO: add mapping
-			var luisRequest = new LUISRequest()
-			{
-				Query = request.Query
-			};
-
-			return _luisClient.GetResponse(luisRequest);
+			return _mapper.Map<Response>(intentResult);
 		}
 	}
 }

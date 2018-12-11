@@ -1,6 +1,5 @@
 ﻿using BusinessLogic.Intent;
 using BusinessLogic.Intent.Models;
-using Infrastructure.Trello;
 using System;
 using System.Threading.Tasks;
 using TrelloHelper.BusinessLogic.Intent.Models;
@@ -8,13 +7,13 @@ using TrelloHelper.BusinessLogic.Intent.Models;
 namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
 	public abstract class TrelloIntentHandlerBase<TIntent> : IIntentHandler
-		where TIntent : IntentBase, new()
+		where TIntent : IntentBase
 	{
-		protected readonly ITrelloClient _trelloClient;
+		protected readonly IntentHandlerAggregateService _aggregateService;
 		
-		public TrelloIntentHandlerBase(ITrelloClient trelloClient)
+		public TrelloIntentHandlerBase(IntentHandlerAggregateService aggregateService)
 		{
-			_trelloClient = trelloClient;
+			_aggregateService = aggregateService;
 		}
 
 		protected abstract string IntentName { get; }
@@ -30,18 +29,19 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 			{
 				throw new ArgumentException($"Cannot handle requested intent: '{data?.Name}'");
 			}
-			
-			var intent = CreateIntentFromData(data);
+
+			var intent = _aggregateService.Mapper.Map<TIntent>(data);
 			return HandleInternal(intent);
 		}
 
 		protected abstract Task<IntentResult> HandleInternal(TIntent intent);
-		
-		protected virtual TIntent CreateIntentFromData(IntentData data)
+
+		protected virtual void ValidateName(string value, string message)
 		{
-			var intent = new TIntent();
-			intent.Data = data;
-			return intent;
+			if (string.IsNullOrEmpty(value))
+			{
+				throw new ArgumentException(message);
+			}
 		}
 	}
 }

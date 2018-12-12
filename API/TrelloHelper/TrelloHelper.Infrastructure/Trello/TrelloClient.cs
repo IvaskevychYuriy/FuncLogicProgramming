@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Common;
 using TrelloHelper.Infrastructure.Extensions;
+using Common.Configurations;
 
 namespace TrelloHelper.Infrastructure.Trello
 {
@@ -12,12 +13,12 @@ namespace TrelloHelper.Infrastructure.Trello
 	public class TrelloClient : ITrelloClient
     {
         private readonly HttpClient _httpClient;
-        private readonly TrelloHelperConfiguration _configuration;
+        private readonly TrelloConfig _configuration;
         private readonly ITrelloUserInfoAccessor _userInfoAccessor;
 
         public TrelloClient(
-            HttpClient httpClient, 
-            TrelloHelperConfiguration configuration, 
+            HttpClient httpClient,
+            TrelloConfig configuration, 
             ITrelloUserInfoAccessor userInfoAccessor)
         {
             _httpClient = httpClient;
@@ -27,19 +28,19 @@ namespace TrelloHelper.Infrastructure.Trello
 
 		public async Task<Board> AddBoard(Board board)
 		{
-			var result = await _client.PostAsync($"boards/?name={board.Name}", null);
+			var result = await _httpClient.PostAsync($"boards/?name={board.Name}", null);
 			return await result.Content.ReadAsJsonAsync<Board>();
 		}
 
 		public async Task<Card> AddCard(Card card)
 		{
-			var result = await _client.PostAsync($"cards/?idList={card.ListId}&name={card.Name}", null);
+			var result = await _httpClient.PostAsync($"cards/?idList={card.ListId}&name={card.Name}", null);
 			return await result.Content.ReadAsJsonAsync<Card>();
 		}
 
 		public async Task<List> AddList(List list)
 		{
-			var result = await _client.PostAsync($"lists/?idBoard={list.BoardId}&name={list.Name}", null);
+			var result = await _httpClient.PostAsync($"lists/?idBoard={list.BoardId}&name={list.Name}", null);
 			return await result.Content.ReadAsJsonAsync<List>();
 		}
 
@@ -80,7 +81,8 @@ namespace TrelloHelper.Infrastructure.Trello
 
         public async Task<List<TrelloBoard>> GetBoards()
         {
-            var result = await _httpClient.GetAsync($"members/{_userInfoAccessor.UserId}/boards/?key={_configuration.TrelloApiKey}&token={_userInfoAccessor.Token}");
+            var result = await _httpClient.GetAsync($"members/{_userInfoAccessor.UserId}/boards/?key={_configuration.ApiKey}&token={_userInfoAccessor.Token}");
+
             return await result.Content.ReadAsJsonAsync<List<TrelloBoard>>();
         }
 	}

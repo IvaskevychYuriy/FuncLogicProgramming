@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TrelloService } from '../services/trello.service';
 import { LuisService } from '../services/luis.service';
@@ -9,16 +9,25 @@ import { LuisSpeechService } from '../services/luis-speech.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
 
   public loggedIn = false;
   command = '';
+
+  @ViewChild('iframe') iframe: ElementRef;
 
   public url: SafeResourceUrl;
 
   constructor(public trelloService: TrelloService, public luisService: LuisService, public luisSpeechService: LuisSpeechService, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      console.log(this.iframe.nativeElement.contentWindow.location);
+    }, 10000)
+    
   }
 
   login() {

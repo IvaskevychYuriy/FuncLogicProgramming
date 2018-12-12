@@ -39,17 +39,17 @@ namespace TrelloHelper.Extensions
 
 		public static IServiceCollection RegisterHttpClients(this IServiceCollection services, IConfiguration configuration)
 		{
+            var config = configuration.GetSection("Configuration");
 
-            var trelloConfig = configuration.GetSection("Configuration");
-            services.Configure<TrelloHelperConfiguration>(trelloConfig);
+            var trelloConfig = config.GetSection(ConfigurationNames.TrelloConfig);
+            services.Configure<TrelloConfig>(trelloConfig);
 
             services.AddHttpClient<TrelloClient>(client =>
             {
-                client.BaseAddress = new Uri(trelloConfig.Get<TrelloHelperConfiguration>().TrelloAPIUrl);
+                client.BaseAddress = new Uri(trelloConfig.Get<TrelloConfig>().ApiKey);
             });
 
-            // LUIS
-            var luisConfig = configuration.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();
+            var luisConfig = config.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();
 			services.AddHttpClient<ILUISClient, LUISClient>(client =>
 			{
 				client.BaseAddress = new Uri(luisConfig.APIUrl);

@@ -15,26 +15,32 @@ namespace TrelloHelper.Infrastructure.Trello
         private readonly TrelloHelperConfiguration _configuration;
         private readonly ITrelloUserInfoAccessor _userInfoAccessor;
 
-        public TrelloClient(HttpClient httpClient, TrelloHelperConfiguration configuration, ITrelloUserInfoAccessor userInfoAccessor)
+        public TrelloClient(
+            HttpClient httpClient, 
+            TrelloHelperConfiguration configuration, 
+            ITrelloUserInfoAccessor userInfoAccessor)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _userInfoAccessor = userInfoAccessor;
         }
 
-		public Task<Board> AddBoard(Board board)
+		public async Task<Board> AddBoard(Board board)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"boards/?name={board.Name}", null);
+			return await result.Content.ReadAsJsonAsync<Board>();
 		}
 
-		public Task<Card> AddCard(List list)
+		public async Task<Card> AddCard(Card card)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"cards/?idList={card.ListId}&name={card.Name}", null);
+			return await result.Content.ReadAsJsonAsync<Card>();
 		}
 
-		public Task<List> AddList(List list)
+		public async Task<List> AddList(List list)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"lists/?idBoard={list.BoardId}&name={list.Name}", null);
+			return await result.Content.ReadAsJsonAsync<List>();
 		}
 
 		public Task DeleteList(List list)
@@ -75,7 +81,6 @@ namespace TrelloHelper.Infrastructure.Trello
         public async Task<List<TrelloBoard>> GetBoards()
         {
             var result = await _httpClient.GetAsync($"members/{_userInfoAccessor.UserId}/boards/?key={_configuration.TrelloApiKey}&token={_userInfoAccessor.Token}");
-
             return await result.Content.ReadAsJsonAsync<List<TrelloBoard>>();
         }
 	}

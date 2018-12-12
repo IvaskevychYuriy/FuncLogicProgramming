@@ -25,7 +25,7 @@ namespace Infrastructure.Trello
 
 		Task<IEnumerable<Card>> GetCardsForList(List list);
 
-		Task<Card> AddCard(List list);
+		Task<Card> AddCard(Card card);
 
 		Task<Card> UpdateCard(Card card);
         Task<List<TrelloBoard>> GetBoards();

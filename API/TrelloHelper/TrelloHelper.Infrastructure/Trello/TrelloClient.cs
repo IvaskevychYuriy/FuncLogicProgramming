@@ -1,15 +1,13 @@
+using Common.Configurations;
 using Infrastructure.Trello;
 using Infrastructure.Trello.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Common;
 using TrelloHelper.Infrastructure.Extensions;
-using Common.Configurations;
 
 namespace TrelloHelper.Infrastructure.Trello
 {
-	// TODO: implement
 	public class TrelloClient : ITrelloClient
     {
         private readonly HttpClient _httpClient;
@@ -25,65 +23,72 @@ namespace TrelloHelper.Infrastructure.Trello
             _configuration = configuration;
             _userInfoAccessor = userInfoAccessor;
         }
-
-		public async Task<Board> AddBoard(Board board)
+		
+		public Task<Board> AddBoard(Board board)
 		{
-			var result = await _httpClient.PostAsync($"boards/?name={board.Name}", null);
-			return await result.Content.ReadAsJsonAsync<Board>();
+			return Post<Board>($"boards/?name={board.Name}");
 		}
 
-		public async Task<Card> AddCard(Card card)
+		public Task<Card> AddCard(Card card)
 		{
-			var result = await _httpClient.PostAsync($"cards/?idList={card.ListId}&name={card.Name}", null);
-			return await result.Content.ReadAsJsonAsync<Card>();
+			return Post<Card>($"cards/?idList={card.ListId}&name={card.Name}");
 		}
 
-		public async Task<List> AddList(List list)
+		public Task<List> AddList(List list)
 		{
-			var result = await _httpClient.PostAsync($"lists/?idBoard={list.BoardId}&name={list.Name}", null);
-			return await result.Content.ReadAsJsonAsync<List>();
+			return Post<List>($"lists/?idBoard={list.BoardId}&name={list.Name}");
+		}
+
+		public Task DeleteCard(Card card)
+		{
+			string url = WithTrelloData($"cards/{card.Id}/");
+			return _httpClient.DeleteAsync(url);
 		}
 
 		public Task DeleteList(List list)
 		{
-			throw new System.NotImplementedException();
+			string url = WithTrelloData($"lists/{list.Id}/closed?value=true");
+			return _httpClient.PostAsync(url, null);
 		}
 
-		public Task<IEnumerable<Board>> GetBoardsForMember(Member member)
+		public Task<IEnumerable<Board>> GetBoards()
 		{
-			throw new System.NotImplementedException();
+			return Get<IEnumerable<Board>>($"members/{_userInfoAccessor.UserId}/boards/");
 		}
 
 		public Task<IEnumerable<Card>> GetCardsForList(List list)
 		{
-			throw new System.NotImplementedException();
+			return Get<IEnumerable<Card>>($"lists/{list.Id}/cards/");
 		}
 
 		public Task<IEnumerable<List>> GetListsForBoard(Board board)
 		{
-			throw new System.NotImplementedException();
-		}
-
-		public Task<Member> GetMemberByToken()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public Task OpenBoard(Board board)
-		{
-			throw new System.NotImplementedException();
+			return Get<IEnumerable<List>>($"boards/{board.Id}/lists/");
 		}
 
 		public Task<Card> UpdateCard(Card card)
 		{
-			throw new System.NotImplementedException();
+			return Post<Card>($"cards/?idList={card.ListId}&keepFromSource=all");
 		}
 
-        public async Task<List<TrelloBoard>> GetBoards()
-        {
-            var result = await _httpClient.GetAsync($"members/{_userInfoAccessor.UserId}/boards/?key={_configuration.ApiKey}&token={_userInfoAccessor.Token}");
+		private async Task<T> Get<T>(string url)
+		{
+			url = WithTrelloData(url);
+			var result = await _httpClient.GetAsync(url);
+			return await result.Content.ReadAsJsonAsync<T>();
+		}
 
-            return await result.Content.ReadAsJsonAsync<List<TrelloBoard>>();
-        }
+		private async Task<T> Post<T>(string url, HttpContent content = null)
+		{
+			url = WithTrelloData(url);
+			var result = await _httpClient.PostAsync(url, content);
+			return await result.Content.ReadAsJsonAsync<T>();
+		}
+
+		private string WithTrelloData(string url)
+		{
+			string delim = url.Contains("?") ? "&" : "?";
+			return $"{url}{delim}key={_configuration.ApiKey}&token={_userInfoAccessor.Token}";
+		}
 	}
 }

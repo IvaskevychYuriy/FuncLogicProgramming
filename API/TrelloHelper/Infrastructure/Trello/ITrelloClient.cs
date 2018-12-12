@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 namespace Infrastructure.Trello
 {
     public interface ITrelloClient
-    {
-		Task<Member> GetMemberByToken();
-
-
-		Task<IEnumerable<Board>> GetBoardsForMember(Member member);
-
-		Task OpenBoard(Board board);
+	{
+		Task<IEnumerable<Board>> GetBoards();
 
 		Task<Board> AddBoard(Board board);
 
@@ -28,6 +23,7 @@ namespace Infrastructure.Trello
 		Task<Card> AddCard(Card card);
 
 		Task<Card> UpdateCard(Card card);
-        Task<List<TrelloBoard>> GetBoards();
-    }
+
+		Task DeleteCard(Card card);
+	}
 }

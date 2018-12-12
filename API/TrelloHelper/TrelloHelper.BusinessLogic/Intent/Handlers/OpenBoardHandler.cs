@@ -30,9 +30,8 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 		protected override async Task<IntentResult> HandleInternal(OpenBoardIntent intent)
 		{
 			ValidateName(intent.BoardName, "Board name must be present to open it");
-
-            var member = await _aggregateService.TrelloClient.GetMemberByToken();
-            var boards = await _aggregateService.TrelloClient.GetBoardsForMember(member);
+			
+            var boards = await _aggregateService.TrelloClient.GetBoards();
             var board = boards.FirstOrDefault(x => x.Name.Equals(intent.BoardName, StringComparison.InvariantCultureIgnoreCase));
 
             if (board == null)

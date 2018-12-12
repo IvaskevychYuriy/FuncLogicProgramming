@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Infrastructure.Trello.Models
+﻿namespace Infrastructure.Trello.Models
 {
 	public class Board
 	{

@@ -3,32 +3,40 @@ using Infrastructure.Trello.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TrelloHelper.Infrastructure.Extensions;
 
 namespace TrelloHelper.Infrastructure.Trello
 {
 	// TODO: implement
 	public class TrelloClient : ITrelloClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _client;
+        private readonly ITrelloTokenProvider _tokenProvider;
 
-        public TrelloClient(HttpClient httpClient)
+		public TrelloClient(
+			HttpClient client,
+			ITrelloTokenProvider tokenProvider)
         {
-            _httpClient = httpClient;
+            _client = client;
+			_tokenProvider = tokenProvider;
         }
 
-		public Task<Board> AddBoard(Board board)
+		public async Task<Board> AddBoard(Board board)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"boards/?name={board.Name}", null);
+			return await result.Content.ReadAsJsonAsync<Board>();
 		}
 
-		public Task<Card> AddCard(List list)
+		public async Task<Card> AddCard(Card card)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"cards/?idList={card.ListId}&name={card.Name}", null);
+			return await result.Content.ReadAsJsonAsync<Card>();
 		}
 
-		public Task<List> AddList(List list)
+		public async Task<List> AddList(List list)
 		{
-			throw new System.NotImplementedException();
+			var result = await _client.PostAsync($"lists/?idBoard={list.BoardId}&name={list.Name}", null);
+			return await result.Content.ReadAsJsonAsync<List>();
 		}
 
 		public Task DeleteList(List list)
@@ -68,7 +76,7 @@ namespace TrelloHelper.Infrastructure.Trello
 
 		//public async Task OpenBoard(string id)
 		//{
-		//    var result = await _httpClient.GetAsync("members/${this.userId}/boards/?key=${TRELLO_KEY}&token=${token}").ConfigureAwait(false);
+		//    var result = await _client.GetAsync("members/${this.userId}/boards/?key=${TRELLO_KEY}&token=${token}").ConfigureAwait(false);
 
 		//    await result.Content.ReadAsStringAsync().ConfigureAwait(false);
 		//}

@@ -1,3 +1,4 @@
+
 ﻿using AutoMapper;
 using BusinessLogic.Context;
 using BusinessLogic.Intent;
@@ -38,15 +39,17 @@ namespace TrelloHelper.Extensions
 
 		public static IServiceCollection RegisterHttpClients(this IServiceCollection services, IConfiguration configuration)
 		{
-			// Trello
-			var trelloConfig = GetConfig(configuration, ConfigurationNames.TrelloConfig).Get<TrelloConfig>();
-			services.AddHttpClient<ITrelloClient, TrelloClient>(client =>
-			{
-				client.BaseAddress = new Uri(trelloConfig.APIUrl);
-			});
 
-			// LUIS
-			var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig).Get<LUISConfig>();
+            var trelloConfig = configuration.GetSection("Configuration");
+            services.Configure<TrelloHelperConfiguration>(trelloConfig);
+
+            services.AddHttpClient<TrelloClient>(client =>
+            {
+                client.BaseAddress = new Uri(trelloConfig.Get<TrelloHelperConfiguration>().TrelloAPIUrl);
+            });
+
+            // LUIS
+            var luisConfig = configuration.GetSection(ConfigurationNames.LUISConfig).Get<LUISConfig>();
 			services.AddHttpClient<ILUISClient, LUISClient>(client =>
 			{
 				client.BaseAddress = new Uri(luisConfig.APIUrl);

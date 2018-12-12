@@ -28,5 +28,6 @@ namespace Infrastructure.Trello
 		Task<Card> AddCard(List list);
 
 		Task<Card> UpdateCard(Card card);
-	}
+        Task<List<TrelloBoard>> GetBoards();
+    }
 }

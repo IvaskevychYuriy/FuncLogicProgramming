@@ -3,6 +3,7 @@ using Infrastructure.Trello.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Common;
 using TrelloHelper.Infrastructure.Extensions;
 
 namespace TrelloHelper.Infrastructure.Trello
@@ -10,15 +11,18 @@ namespace TrelloHelper.Infrastructure.Trello
 	// TODO: implement
 	public class TrelloClient : ITrelloClient
     {
-        private readonly HttpClient _client;
-        private readonly ITrelloTokenProvider _tokenProvider;
+        private readonly HttpClient _httpClient;
+        private readonly TrelloHelperConfiguration _configuration;
+        private readonly ITrelloUserInfoAccessor _userInfoAccessor;
 
-		public TrelloClient(
-			HttpClient client,
-			ITrelloTokenProvider tokenProvider)
+        public TrelloClient(
+            HttpClient httpClient, 
+            TrelloHelperConfiguration configuration, 
+            ITrelloUserInfoAccessor userInfoAccessor)
         {
-            _client = client;
-			_tokenProvider = tokenProvider;
+            _httpClient = httpClient;
+            _configuration = configuration;
+            _userInfoAccessor = userInfoAccessor;
         }
 
 		public async Task<Board> AddBoard(Board board)
@@ -74,11 +78,10 @@ namespace TrelloHelper.Infrastructure.Trello
 			throw new System.NotImplementedException();
 		}
 
-		//public async Task OpenBoard(string id)
-		//{
-		//    var result = await _client.GetAsync("members/${this.userId}/boards/?key=${TRELLO_KEY}&token=${token}").ConfigureAwait(false);
-
-		//    await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-		//}
+        public async Task<List<TrelloBoard>> GetBoards()
+        {
+            var result = await _httpClient.GetAsync($"members/{_userInfoAccessor.UserId}/boards/?key={_configuration.TrelloApiKey}&token={_userInfoAccessor.Token}");
+            return await result.Content.ReadAsJsonAsync<List<TrelloBoard>>();
+        }
 	}
 }

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace TrelloHelper.Infrastructure.Trello
 {
-	public class TrelloUserInfoAccessor: ITrelloUserInfoAccessor
+	public class TrelloUserInfoAccessor : ITrelloUserInfoAccessor
     {
         private readonly IHttpContextAccessor _contextAccessor;
 
-        TrelloUserInfoAccessor(IHttpContextAccessor contextAccessor)
+        public TrelloUserInfoAccessor(IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
         }

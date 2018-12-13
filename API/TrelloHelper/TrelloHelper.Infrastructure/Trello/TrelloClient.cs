@@ -1,6 +1,7 @@
 using Common.Configurations;
 using Infrastructure.Trello;
 using Infrastructure.Trello.Models;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,11 +17,11 @@ namespace TrelloHelper.Infrastructure.Trello
 
         public TrelloClient(
             HttpClient httpClient,
-            TrelloConfig configuration, 
+            IOptions<TrelloConfig> configuration, 
             ITrelloUserInfoAccessor userInfoAccessor)
         {
             _httpClient = httpClient;
-            _configuration = configuration;
+            _configuration = configuration.Value;
             _userInfoAccessor = userInfoAccessor;
         }
 		

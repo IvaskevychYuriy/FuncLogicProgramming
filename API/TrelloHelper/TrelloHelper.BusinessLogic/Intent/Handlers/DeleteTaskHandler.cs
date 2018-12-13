@@ -12,12 +12,13 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
     public class DeleteTaskHandler : TrelloIntentHandlerBase<DeleteTaskIntent>
     {
         private readonly IContextProvider _contextProvider;
-        private readonly ITrelloTokenProvider _tokenProvider;
+        private readonly ITrelloUserInfoAccessor _tokenProvider;
 
-        public DeleteTaskHandler(IntentHandlerAggregateService aggregateService,
+        public DeleteTaskHandler(
+			IntentHandlerAggregateService aggregateService,
             IContextProvider contextProvider,
-            ITrelloTokenProvider tokenProvider) : base(aggregateService)
-        {
+            ITrelloUserInfoAccessor tokenProvider) : base(aggregateService)
+		{
             _contextProvider = contextProvider;
             _tokenProvider = tokenProvider;
         }
@@ -30,7 +31,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
             ValidateName(intent.ListName, "List name must be present to delete task from it");
             var key = new ContextCacheKeyWrapper
             {
-                TrelloToken = _tokenProvider.GetToken()
+                TrelloToken = _tokenProvider.Token
             };
 
             var boardId = _contextProvider.Get(key)?.BoardId;

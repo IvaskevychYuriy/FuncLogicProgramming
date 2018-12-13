@@ -13,12 +13,12 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 	public class OpenBoardHandler : TrelloIntentHandlerBase<OpenBoardIntent>
 	{
 		private readonly IContextProvider _contextProvider;
-        private readonly ITrelloTokenProvider _tokenProvider;
+        private readonly ITrelloUserInfoAccessor _tokenProvider;
 
         public OpenBoardHandler(
 			IntentHandlerAggregateService aggregateService,
 			IContextProvider contextProvider,
-            ITrelloTokenProvider tokenProvider)
+            ITrelloUserInfoAccessor tokenProvider)
 			: base(aggregateService)
 		{
 			_contextProvider = contextProvider;
@@ -47,7 +47,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 
 			var key = new ContextCacheKeyWrapper
 			{
-				TrelloToken = _tokenProvider.GetToken()
+				TrelloToken = _tokenProvider.Token
             };
 
 			_contextProvider.AddOrUpdate(key, entry);

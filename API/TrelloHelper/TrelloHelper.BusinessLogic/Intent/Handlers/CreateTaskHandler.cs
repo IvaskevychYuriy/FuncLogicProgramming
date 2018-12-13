@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Context;
 using BusinessLogic.Context.Models;
@@ -14,11 +13,12 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 	public class CreateTaskHandler : TrelloIntentHandlerBase<CreateTaskIntent>
 	{
         private readonly IContextProvider _contextProvider;
-        private readonly ITrelloTokenProvider _tokenProvider;
+        private readonly ITrelloUserInfoAccessor _tokenProvider;
 
-        public CreateTaskHandler(IntentHandlerAggregateService aggregateService,
+        public CreateTaskHandler(
+			IntentHandlerAggregateService aggregateService,
             IContextProvider contextProvider,
-            ITrelloTokenProvider tokenProvider) : base(aggregateService)
+            ITrelloUserInfoAccessor tokenProvider) : base(aggregateService)
 		{
             _contextProvider = contextProvider;
             _tokenProvider = tokenProvider;
@@ -33,7 +33,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 
             var key = new ContextCacheKeyWrapper
             {
-                TrelloToken = _tokenProvider.GetToken()
+                TrelloToken = _tokenProvider.Token
             };
 
             var boardId = _contextProvider.Get(key)?.BoardId;

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Context;
 using BusinessLogic.Context.Models;
 using BusinessLogic.Intent.Models;
 using Infrastructure.Trello;
-using Infrastructure.Trello.Models;
 using TrelloHelper.BusinessLogic.Intent.Constants;
 using TrelloHelper.BusinessLogic.Intent.Models;
 
@@ -14,11 +12,12 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 	public class DeleteListHandler : TrelloIntentHandlerBase<DeleteListIntent>
 	{
         private readonly IContextProvider _contextProvider;
-        private readonly ITrelloTokenProvider _tokenProvider;
+        private readonly ITrelloUserInfoAccessor _tokenProvider;
 
-        public DeleteListHandler(IntentHandlerAggregateService aggregateService,
+        public DeleteListHandler(
+			IntentHandlerAggregateService aggregateService,
             IContextProvider contextProvider,
-            ITrelloTokenProvider tokenProvider) : base(aggregateService)
+            ITrelloUserInfoAccessor tokenProvider) : base(aggregateService)
 		{
             _contextProvider = contextProvider;
             _tokenProvider = tokenProvider;
@@ -31,7 +30,7 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 			ValidateName(intent.ListName, "List name must be present to delete it");
             var key = new ContextCacheKeyWrapper
             {
-                TrelloToken = _tokenProvider.GetToken()
+                TrelloToken = _tokenProvider.Token
             };
 
             var boardId = _contextProvider.Get(key)?.BoardId;

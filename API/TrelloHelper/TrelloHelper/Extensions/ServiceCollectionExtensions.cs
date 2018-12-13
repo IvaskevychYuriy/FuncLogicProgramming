@@ -78,6 +78,7 @@ namespace TrelloHelper.Extensions
 			services.AddScoped<IContextProvider, ContextProvider>();
 			services.AddScoped<IQueryProcessor, QueryProcessor>();
 			services.AddScoped<IntentHandlerAggregateService>();
+			services.AddScoped<ITrelloUserInfoAccessor, TrelloUserInfoAccessor>();
 
 			return services;
 		}

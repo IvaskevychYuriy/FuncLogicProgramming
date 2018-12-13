@@ -14,9 +14,10 @@ namespace TrelloHelper.BusinessLogic.MappingProfiles
 				.IncludeAllDerived()
 				.ForMember(dest => dest.Data, opt => opt.MapFrom(src => src));
 
-
 			// maps from Intents to Business models
 			CreateMap<IntentResult, Response>();
+            CreateMap<UriIntentResult, Response>()
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Uri));
 		}
 	}
 }

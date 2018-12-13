@@ -40,16 +40,18 @@ namespace TrelloHelper.Infrastructure.Trello
 			return Post<List>($"lists/?idBoard={list.BoardId}&name={list.Name}");
 		}
 
-		public Task DeleteCard(Card card)
+		public async Task DeleteCard(Card card)
 		{
 			string url = WithTrelloData($"cards/{card.Id}/");
-			return _httpClient.DeleteAsync(url);
+			var result = await _httpClient.DeleteAsync(url);
+			result.EnsureSuccessStatusCode();
 		}
 
-		public Task DeleteList(List list)
+		public async Task DeleteList(List list)
 		{
 			string url = WithTrelloData($"lists/{list.Id}/closed?value=true");
-			return _httpClient.PostAsync(url, null);
+			var result = await _httpClient.PostAsync(url, null);
+			result.EnsureSuccessStatusCode();
 		}
 
 		public Task<IEnumerable<Board>> GetBoards()
@@ -76,6 +78,7 @@ namespace TrelloHelper.Infrastructure.Trello
 		{
 			url = WithTrelloData(url);
 			var result = await _httpClient.GetAsync(url);
+			result.EnsureSuccessStatusCode();
 			return await result.Content.ReadAsJsonAsync<T>();
 		}
 
@@ -83,6 +86,7 @@ namespace TrelloHelper.Infrastructure.Trello
 		{
 			url = WithTrelloData(url);
 			var result = await _httpClient.PostAsync(url, content);
+			result.EnsureSuccessStatusCode();
 			return await result.Content.ReadAsJsonAsync<T>();
 		}
 

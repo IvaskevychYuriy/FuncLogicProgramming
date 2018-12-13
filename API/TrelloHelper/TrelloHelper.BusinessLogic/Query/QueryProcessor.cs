@@ -31,10 +31,10 @@ namespace TrelloHelper.BusinessLogic.Query
 			request = request ?? throw new ArgumentNullException(nameof(request));
 
 			var luisRequest = _mapper.Map<LUISRequest>(request);
-			var luisResponse = await _luisClient.GetResponse(luisRequest).ConfigureAwait(false);
+			var luisResponse = await _luisClient.GetResponse(luisRequest);
 			
 			var data = _mapper.Map<IntentData>(luisResponse);
-			var intentResult = await _intentExecutor.Execute(data).ConfigureAwait(false);
+			var intentResult = await _intentExecutor.Execute(data);
 
 			return _mapper.Map<Response>(intentResult);
 		}

@@ -8,7 +8,7 @@ namespace TrelloHelper.Infrastructure.Extensions
 	{
 		public static async Task<T> ReadAsJsonAsync<T>(this HttpContent content)
 		{
-			string json = await content.ReadAsStringAsync().ConfigureAwait(false);
+			string json = await content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<T>(json);
 		}
 	}

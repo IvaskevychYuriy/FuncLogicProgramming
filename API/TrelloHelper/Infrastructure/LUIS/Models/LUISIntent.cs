@@ -7,6 +7,6 @@ namespace Infrastructure.LUIS.Models
 		[JsonProperty("intent")]
         public string Name { get; set; }
 
-        public int Score { get; set; }
+        public double Score { get; set; }
     }
 }

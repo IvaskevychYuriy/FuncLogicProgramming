@@ -14,7 +14,8 @@ namespace TrelloHelper.BusinessLogic.MappingProfiles
 
 
 			// maps from Infrastructure to Business models
-			CreateMap<LUISResponse, IntentData>();
+			CreateMap<LUISResponse, IntentData>()
+				.ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.TopScoringIntent.Name));
 		}
 	}
 }

@@ -42,16 +42,16 @@ namespace TrelloHelper.Extensions
 		{
             var trelloConfig = GetConfig(configuration, ConfigurationNames.TrelloConfig);
             services.Configure<TrelloConfig>(trelloConfig);
-
             services.AddHttpClient<ITrelloClient, TrelloClient>(client =>
             {
                 client.BaseAddress = new Uri(trelloConfig.Get<TrelloConfig>().APIUrl);
             });
 
-			var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig).Get<LUISConfig>();
+			var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig);
+			services.Configure<LUISConfig>(luisConfig);
 			services.AddHttpClient<ILUISClient, LUISClient>(client =>
 			{
-				client.BaseAddress = new Uri(luisConfig.APIUrl);
+				client.BaseAddress = new Uri(luisConfig.Get<LUISConfig>().APIUrl);
 			});
 
 			return services;

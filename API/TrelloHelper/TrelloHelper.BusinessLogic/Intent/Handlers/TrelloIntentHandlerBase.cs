@@ -9,7 +9,7 @@ using TrelloHelper.BusinessLogic.Intent.Models;
 namespace TrelloHelper.BusinessLogic.Intent.Handlers
 {
 	public abstract class TrelloIntentHandlerBase<TIntent> : IIntentHandler
-		where TIntent : IntentBase
+		where TIntent : IntentBase, new()
 	{
 		protected readonly IntentHandlerAggregateService _aggregateService;
 
@@ -32,7 +32,8 @@ namespace TrelloHelper.BusinessLogic.Intent.Handlers
 				throw new ArgumentException($"Cannot handle requested intent: '{data?.Name}'");
 			}
 
-			var intent = _aggregateService.Mapper.Map<TIntent>(data);
+			var intent = new TIntent();
+			intent.Data = data;
 			return HandleInternal(intent);
 		}
 

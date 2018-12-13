@@ -12,7 +12,7 @@ export class TrelloService {
 
   constructor(private httpClient: HttpClient) { }
 
-  private userId: string;
+  public userId: string;
 
   public activeBoardId: string;
 

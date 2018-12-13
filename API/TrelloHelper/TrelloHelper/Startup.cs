@@ -20,6 +20,12 @@ namespace TrelloHelper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
 			services.RegisterAutomapper();
 			services.RegisterOptions(Configuration);
@@ -35,7 +41,7 @@ namespace TrelloHelper
             {
                 app.UseDeveloperExceptionPage();
             }
-			
+            app.UseCors("MyPolicy");
             app.UseMvc();
         }
     }

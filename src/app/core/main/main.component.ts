@@ -38,58 +38,63 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   sendCommand() {
-    this.luisService.sendCommand(this.command).subscribe(res => {
-      console.log(res);
+    debugger;
+    // this.luisService.sendCommand(this.command).subscribe(res => {
+    //   console.log(res);
 
-      switch (res.topScoringIntent.intent) {
-        case 'CreateBoard':
-          {
-          const maximum = Math.max(...res.entities.map(e => e.score));
+    //   switch (res.topScoringIntent.intent) {
+    //     case 'CreateBoard':
+    //       {
+    //       const maximum = Math.max(...res.entities.map(e => e.score));
 
-          const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
+    //       const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
 
-            this.trelloService.addBoard(lookup.entity).subscribe(res => {
-              console.log(res);
-            })
-          }
-          break;
-        case 'OpenBoard':
-          {
-            const maximum = Math.max(...res.entities.map(e => e.score));
+    //         this.trelloService.addBoard(lookup.entity).subscribe(res => {
+    //           console.log(res);
+    //         })
+    //       }
+    //       break;
+    //     case 'OpenBoard':
+    //       {
+    //         const maximum = Math.max(...res.entities.map(e => e.score));
 
-            const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
-            this.trelloService.openBoard(lookup.entity).subscribe(url => this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url));
-          }
-          break;
-        case 'CreateList':
-          {
-            const maximum = Math.max(...res.entities.map(e => e.score));
+    //         const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
+    //         this.trelloService.openBoard(lookup.entity).subscribe(url => this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url));
+    //       }
+    //       break;
+    //     case 'CreateList':
+    //       {
+    //         const maximum = Math.max(...res.entities.map(e => e.score));
 
-            const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
+    //         const lookup = res.entities.find(e => e.score >= maximum && e.type === 'EntityName');
 
-            this.trelloService.createList(lookup.entity).subscribe(res => {
-              console.log(res);
-            })
-          }
-          break;
-        case 'CreateTask':
-          {
-            const listName = res.entities.find(e => e.role === 'ListName');
-            const taskName = res.entities.find(e => e.role === 'TaskName');
+    //         this.trelloService.createList(lookup.entity).subscribe(res => {
+    //           console.log(res);
+    //         })
+    //       }
+    //       break;
+    //     case 'CreateTask':
+    //       {
+    //         const listName = res.entities.find(e => e.role === 'ListName');
+    //         const taskName = res.entities.find(e => e.role === 'TaskName');
 
-            if (listName == null || taskName == null) {
-              break;
-            }
+    //         if (listName == null || taskName == null) {
+    //           break;
+    //         }
 
             
 
-            this.trelloService.createTask(taskName.entity, listName.entity).subscribe();
-          }
-        default:
-          break;
-      }
+    //         this.trelloService.createTask(taskName.entity, listName.entity).subscribe();
+    //       }
+    //     default:
+    //       break;
+    //   }
 
-      this.command = '';
+    //   this.command = '';
+    // })
+
+    this.luisService.sendCommandToBackend(this.command).subscribe(res => {
+      console.log(res);
     })
   }
 

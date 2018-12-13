@@ -7,9 +7,10 @@ using Common.Configurations;
 using Common.Configurations.Options;
 using Infrastructure.LUIS;
 using Infrastructure.Trello;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using TrelloHelper.BusinessLogic.Context;
@@ -47,7 +48,7 @@ namespace TrelloHelper.Extensions
                 client.BaseAddress = new Uri(trelloConfig.Get<TrelloConfig>().APIUrl);
             });
 
-            var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig).Get<LUISConfig>();
+			var luisConfig = GetConfig(configuration, ConfigurationNames.LUISConfig).Get<LUISConfig>();
 			services.AddHttpClient<ILUISClient, LUISClient>(client =>
 			{
 				client.BaseAddress = new Uri(luisConfig.APIUrl);
@@ -72,12 +73,13 @@ namespace TrelloHelper.Extensions
 		{
 			services.RegisterIntentHandlers();
 			
-			services.AddScoped<IIntentExecutor, IntentExecutor>();
-			services.AddScoped<IContextProvider, ContextProvider>();
-			services.AddScoped<IQueryProcessor, QueryProcessor>();
-			services.AddScoped<IntentHandlerAggregateService>();
-			services.AddScoped<ITrelloUserInfoAccessor, TrelloUserInfoAccessor>();
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddTransient<IIntentExecutor, IntentExecutor>();
+			services.AddTransient<IContextProvider, ContextProvider>();
+			services.AddTransient<IQueryProcessor, QueryProcessor>();
+			services.AddTransient<IntentHandlerAggregateService>();
+			services.AddTransient<ITrelloUserInfoAccessor, TrelloUserInfoAccessor>();
+			services.AddHttpContextAccessor();
+			services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 			return services;
 		}

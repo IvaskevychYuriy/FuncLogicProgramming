@@ -41,6 +41,7 @@ namespace TrelloHelper
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseCors("MyPolicy");
             app.UseMvc();
         }

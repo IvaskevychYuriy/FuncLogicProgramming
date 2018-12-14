@@ -95,6 +95,9 @@ export class MainComponent implements OnInit, AfterViewInit {
 
     this.luisService.sendCommandToBackend(this.command).subscribe(res => {
       console.log(res);
+      if (res && res.url) {
+        this.url = this.sanitizer.bypassSecurityTrustResourceUrl(res.url);
+      }
     })
   }
 

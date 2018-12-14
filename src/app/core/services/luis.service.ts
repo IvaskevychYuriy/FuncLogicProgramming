@@ -22,7 +22,7 @@ export class LuisService {
       'TRELLO_TOKEN': localStorage.getItem('trello_token')
     });
 
-    return this.httpClient.post<any>('http://localhost:44369/api/query/performActive', {query: command}, {
+    return this.httpClient.post<any>('https://localhost:5001/api/query/performAction', {query: command}, {
       headers: headers
     })
   }

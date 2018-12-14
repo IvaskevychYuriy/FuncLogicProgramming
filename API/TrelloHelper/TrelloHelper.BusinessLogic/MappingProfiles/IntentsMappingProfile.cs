@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BusinessLogic.Intent.Enumerations;
 using BusinessLogic.Intent.Models;
 using BusinessLogic.Query.Models;
+using TrelloHelper.BusinessLogic.Tools;
 
 namespace TrelloHelper.BusinessLogic.MappingProfiles
 {
@@ -8,6 +10,11 @@ namespace TrelloHelper.BusinessLogic.MappingProfiles
 	{
 		public IntentsMappingProfile()
 		{
+			// helper mappings
+			CreateMap<string, IntentRole?>()
+				.ConvertUsing(x => EnumHelper<IntentRole>.ParseDisplayValues(x));
+
+
 			// maps from Business to Intents models
 
 
